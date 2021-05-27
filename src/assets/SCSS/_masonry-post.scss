@@ -1,0 +1,12 @@
+.masonry-post {
+    position: relative; // ele inside we put position: absolute
+    border-radius: 5px;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center center;
+    height: 100%;
+    width: 100%;
+    text-decoration: none;
+    margin: 0 auto;
+    width: 100%;
+}

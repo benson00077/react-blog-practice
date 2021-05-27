@@ -41,9 +41,9 @@
 
     ul {
         height: 100%;
-        margin-block-start: 0;
-        margin-block-end: 0;
-        padding-inline-start: 0;
+        margin-block-start: 0; // default styles that we want 2 override
+        margin-block-end: 0;   // default styles that we want 2 override
+        padding-inline-start: 0; 
         display: flex;
         align-items: center;
         list-style-type: none;
