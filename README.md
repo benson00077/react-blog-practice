@@ -3,6 +3,11 @@
 ## Table of Contetns
 TBD (to download MarkDown All in One in VSCode)
 
+## Dependency used
+SASS: node-sass, sass-loader
+UI: antd
+Date: moment eg. `moment().format('MMMM DD, YYYY')` in the posts obj literals in mocks direcotry
+
 ## BUILDING: Navigation bar w/ RWD
 #### 動態管理 URL -- 利用 match obj 
     避免 hardcode 每個分頁的 <Route>
@@ -61,9 +66,16 @@ TBD (to download MarkDown All in One in VSCode)
 
 ## BUILDING: Masonry(blog posts in home page) 
 
-- 圖片載不出來：問題出在 `require(url)` vs `require(url).default` （後者才載出來）
-- But WHY??
-  ```JXS
+### About the Layout of components for blogposts
++-- Home
+    +-- PostMasonry (layout for MasonryPost)
+    |   +-- MasonryPost
+    +-- MasonryPost (eg. for specific css style concern)
+
+#### Background img not loaded
+- 問題出在 `require(url)` vs `require(url).default` （後者才載出來）
+- But WHY ??
+  ```JSX
   const style = { backgroundImage: `url("${require(`../../assets/images/${post.image}`)}")` };
   console.log(style)  
   //{backgroundImage: "url("[object Module]")"}
@@ -72,3 +84,56 @@ TBD (to download MarkDown All in One in VSCode)
   console.log(style) 
   //{backgroundImage: "url("/static/media/money.88234e16.jpg")"}
   ```
+#### CSS Grid merge config -- merge with posts obj literal thus manipulate one's css out of many
+- Where: in home.js, where we call PostMasonry conponent, where we call MasonryPost component
+- Purpose: dynamic let one grid out of many have different grid-area style. seperation of concerns (SOC) 
+- Outcomes: 
+  | component | Layout for ... | html tags after rendered | 
+  | ------ | ------ | ------ |
+  |PostMasonry| Grid 佈局不同 Posts |  <section class="masonry" style="grid-template-columns: repeat(3, minmax(275px, 1fr));">
+  |MasonryPost| Post's title, date, tag, background img | a 標籤內的`styles`(inline style) 多了 `grid-area: 1 / 2 / 3 / 3`">
+
+- How:
+  obj trending 是 import 進來的 posts obj literals, 以 posts 的 props name 被傳給 PostMasonry 再給 MasonPost
+  - home.js
+  ```JSX
+    const trendingConfig = {
+        1: {
+            gridArea: '1 / 2 / 3 / 3'
+        }
+    }
+
+    const mergeStyles = function (posts, config) {
+        posts.forEach((post, index) => {
+            post.style = config[index] // if config have that index ...
+        })
+    }
+
+    mergeStyles(trending, trendingConfig)
+  ```
+  - masonry-post.js
+  ```JSX
+    // before
+    const style = { backgroundImage: `url("${require(`../../assets/images/${post.image}`).default}")` };
+
+    // after w/ Destructuring 
+    const imageBackground = { backgroundImage: `url("${require(`../../assets/images/${post.image}`).default}")` };
+
+    const style = {...imageBackground, ...post.style}
+
+    // the component returns ...
+    <div className="tags-container">
+        {
+            post.categories.map((tag, ind) => (
+                <span key={ind} className="tag" style={{ backgroundColor: categoryColors[tag] }}>
+                    {tag.toUpperCase()}
+                </span>
+            ))
+        }
+    </div>
+  ```
+  - Careful with `inline style`:
+    Here we merged grid-area as an inline style, which means RWD should specifically dealt with, other than `@media screen and (max-width: 900px){...}` set in SCSS. <br/>
+    Useing `window.innerWidth` to access the window's visual viewport & Useing `ternary conditional operator` to filter the inline style. <br/>
+    Downside is UI won't change smoothly according to manul change of window's visual viewport, only when refresh the page would fix the UI problem. 
+

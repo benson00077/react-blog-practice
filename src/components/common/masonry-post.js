@@ -3,11 +3,14 @@ import { categoryColors } from './styles'
 
 function MasonryPost({ post, tagsOnTop }) {
 
-    const style = { backgroundImage: `url("${require(`../../assets/images/${post.image}`).default}")` };
+    const windowWidth = window.innerWidth  // width of the window's visual viewport.
+    const imageBackground = { backgroundImage: `url("${require(`../../assets/images/${post.image}`).default}")` };
+
+    const style = windowWidth > 900 ? {...imageBackground, ...post.style} : imageBackground
 
     return (
         <a className="masonry-post overlay" style={style} href={post.link}>
-            <div className="image-text">
+            <div className="image-text" style={{justifyContent: tagsOnTop ? 'space-between' : 'flex-end'}}>
                 <div className="tags-container">
                     {
                         post.categories.map((tag, ind) => (
