@@ -284,13 +284,15 @@ to download awesome extension in VSCode
     MYSQL_DB=react_blog
   ```
 
-### Build connection
+### Build connection 2 MySQL
 - how ? 
 
 
-## Node version management
-    brew install mysql casing brew auto-update and node auto-update, which might throw erre of not suportinig for latest node version.
-### nvm install by MacOS homebrew ❌
+
+
+## NVM 
+brew install mysql lead to brew auto-update and node auto-update, anthus node-sass module throw erre of not suportinig for latest node version.
+### ❌ nvm install by MacOS homebrew
     結論：請按照官網去下載，nvm 不支援 homebrew，會引來很多麻煩⋯⋯以下記錄錯誤過程
 - `brew install nvm`
 - `brew info nvm` see the "caveats" section, like following
@@ -320,8 +322,8 @@ to download awesome extension in VSCode
   - To edit, press `i` button
   - To save the changes,  `esc +: qw`
 - (op2) `nano ~/.zshrc` to edit it
-  - `Ctrl+o` to save
-  - `Ctrl+x` to exit 
+  - `Ctrl+O` to save
+  - `Ctrl+X` to exit 
   - caveats 所說的 `NVM_DIR="$HOME/.nvm"` 改成 `Users/benson/.nvm` 跟改成 `~/.nvm` 但都沒用！Shell 內還是不知道 nvm 是誰
 - `source ~/.zshrc` or reset the terminal before run the nvm
   - `source` command can be used to load any functions file into the current shell script or a command prompt.
@@ -333,9 +335,10 @@ to download awesome extension in VSCode
   zsh compinit: insecure directories, run compaudit for list.
   Ignore insecure directories and continue [y] or abort compinit [n]? 
   ```
-### 重新整理、安裝 npm, nvm, node
+### ⭕️ 重新整理並安裝 npm, nvm, node
     目標架構：不透過 brew，安裝 nvm，之下安裝 npm，之下安裝 node
 #### 解除安裝前面 brew 安裝失敗的東西
+(下列的bash_profile 類似於前述我用的 zshrc，刪掉前述新增的config)
   ```
   brew uninstall nvm
   sudo rm -rf ~/.nvm
@@ -345,21 +348,29 @@ to download awesome extension in VSCode
   - `-rf`: combination of 2 commands: `-r` (recursive removal), `-f` (force)
   - `~/.npm` is a cache that npm uses to avoid re-downloading the same package multiple times. 
     - `npm cache clean` to cleanup
-  - (bash_profile 類似於前述我用的 zshrc，刪掉前述新增的config)
-#### 解除安裝前面 node 
+#### 解除安裝前面 node
   - `brew uninstall node`
-#### nvm install by cURL ⭕️ 
-  - by cURL command: `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash`
+#### nvm install by cURL
+  - by cURL command: 
+    ```
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+    ```
   - 按照[nvm的git官網](https://github.com/nvm-sh/nvm)的除錯建議，新增設定到`~/.zshrc`之後`. ~/.zshrc`就可以了（等同`source ~/.zshrc`）
 #### nvm command 
-  - `nvm ls` 列出 Local 所有的 Node.js 版本
-  - `nvm ls-remote` 列出 Remote 所有的 Node.js 版本
-  - `nvm install [version]` version = number
-  - `nvm install stable` 安裝目前的穩定版(但是不是官網推薦版本⋯⋯是最新)
-  - `nvm alias default [version]` 指令以後預設啟用的 Node.js 版本
-  - `nvm use [version]` 使用該版本，但不更改預設啟用的版本
+  | 指令 | 說明 |
+  | ------ | ------ |
+  |`nvm ls`| 列出 Local 所有的 Node.js 版本 |
+  |`nvm ls-remote`| 列出 Remote 所有的 Node.js 版本 |
+  |`nvm install [version]` | version = number |
+  |`nvm install stable` | 安裝目前的穩定版(但是不是官網推薦版本⋯⋯是最新) |
+  |`nvm alias default [version]` | 指令以後預設啟用的 Node.js 版本 |
+  |`nvm use [version]` | 使用該版本，但不更改預設啟用的版本 |
 
-### 記錄前後差異
+#### npm, node installed by nvm
+  - 按照上面指令下載 LTS node 版本
+  - Node would include npm
+
+### 🔺 記錄前後差異
   - `which node`
     - before: /usr/local/bin
     - after: /Users/benson/.nvm/versions/node/v14.17.0/bin/node
@@ -403,31 +414,3 @@ to download awesome extension in VSCode
     npm WARN , but package-lock.json was generated for lockfileVersion@2. I'll try to do my best with it!
     ```
 
-
-    
-
-
-
-(base) benson@BensondeMacBook-Pro .npm % `npm list -g`
-/usr/local/lib
-├── create-react-app@4.0.3
-├── npm@7.13.0
-└── sass@1.32.8
-
-
-如果沒有 -g 就是查看當前目錄
-(base) benson@BensondeMacBook-Pro blog-react % `npm ls`
-blog-react@0.1.0 /Users/benson/Documents/workrepo/blog-react
-├── @quasar/extras@1.10.2
-├── @testing-library/jest-dom@5.11.10
-├── @testing-library/react@11.2.6
-├── @testing-library/user-event@12.8.3
-├── antd@4.15.0
-├── moment@2.29.1
-├── node-sass@5.0.0
-├── react-dom@17.0.2
-├── react-router-dom@5.2.0
-├── react-scripts@4.0.3
-├── react@17.0.2
-├── sass-loader@10.1.1
-└── web-vitals@1.1.1
