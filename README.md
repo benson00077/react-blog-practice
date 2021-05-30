@@ -7,6 +7,7 @@ to download MarkDown All in One in VSCode
 to download awesome extension in VSCode
 
 ## Dependency used
+`eco-system`: react-router-dom <br/>
 `SASS`: node-sass, sass-loader <br/>
 `UI`: antd & ionicons <br/> 
 `Date`: moment. `moment().format('MMMM DD, YYYY')` to generate posts date <br/>
@@ -85,8 +86,9 @@ to download awesome extension in VSCode
 
 ## BUILDING: Masonry (blog posts in home page) 
 
-    Layout of components for blogposts
 ```
+Layout of components for blogposts:
+
 Home
 └───PostMasonry (Layout for MasonryPost)
 |   └───MasonryPost
@@ -99,17 +101,14 @@ Home
   - seperation of concerns (`SOC`) 
   - dynamic let one grid out of many have different grid-area style(by Inline style).
 - Outcomes: 
-  | component | Layout for ... | html tags after rendered | 
+  | component | Layout | html tags after rendered | 
   | ------ | ------ | ------ |
-  |PostMasonry| Grid 佈局不同 Posts |  
-  ```JSX 
-  <section class="masonry" style="grid-template-columns: repeat(3, minmax(275px, 1fr));">
-  ```
-  |MasonryPost| Post's title, date, tag, background img | a 標籤內的`styles`(inline style) 多了 `grid-area: 1 / 2 / 3 / 3`">
+  |PostMasonry| Grid 佈局不同 Posts | `<section class="masonry" style="grid-template-columns: repeat(3, minmax(275px, 1fr));">`
+  |MasonryPost| Post's title, date, tag, background img | a 標籤內的`styles`(inline style) 多了 `grid-area: 1 / 2 / 3 / 3 ;`
 
 - How:
-  - obj trending 是 import 進來的 posts obj literals, 以 posts 的 props name 被傳給 PostMasonry 再給 MasonryPost
-  - home.js (利用物件的 `dot notation` 直接附加 obj style 屬性，做到 `SOC`)
+  - `trending` obj as trending posts obj literals, 零件中被以 posts 的 props name 傳給 PostMasonry 再給 MasonryPost
+  - home.js (利用物件的 `dot notation` 直接附加一個 style 屬性，做到 `SOC`)
   ```JSX
     const trendingConfig = {
         1: {
@@ -169,16 +168,16 @@ Home
 
 ### Pagination 翻頁機能 [TBD]
 - home.js 內的 post-grid.js
-- [TBD] 控制一頁顯示幾個 Posts：使用 useMemo + useState。 <br/>
-  BUT why not useEffect or useCallback ?
+- [TBD] 控制一頁顯示幾個 Posts：使用 useMemo + useState → BUT why not useEffect or useCallback ?
 - 翻頁後自動拉動捲軸向上：useEffect
 
 ### CSS dealing with backgorund img(variouse size) in grid
-- 兩個重點
-  - 如何抓取圖片放入 inline style，讓 CSS 抓取圖片？
+- 三個重點
+  - `<a>` & `<img>` 分別如何 fetch bg-img ?
+  - 承上，JSX中如何將其 `url str` (代表檔案路徑的str) 放入 inline style？
   - CSS 如何使圖片置中，儘管圖片原檔大小彼此不一？
 - `Posts obj literal` having post.image (對應到真正的圖檔名稱), which is accessed and set as `url str`(檔案路徑的str) and put in CSS `inline style`
-- in masonry-post: `url str` as obj literal {backgroundImage: url}, and be put into JSX a tag's style property.
+- in masonry-post: `url str` as obj literal `{backgroundImage: url}`, and be put into JSX a tag's style property.
   ```JSX
   const imageBackground = { backgroundImage: `url("${require(`../../assets/images/${post.image}`).default}")` };
   const style = windowWidth > 900 ? {...imageBackground, ...post.style} : imageBackground
@@ -199,3 +198,61 @@ Home
   object-position: center center;
   ```
    
+
+
+
+
+
+# My react blog practice note (Front-end)
+
+## TBD: Table of Contetns
+to download MarkDown All in One in VSCode
+
+## TBD: File tree
+to download awesome extension in VSCode
+
+## Init
+- 初始化 `npm init` <br/>
+  - `scripts:test` for example, let you type `npm run test` in Unix Command to run your script.
+  ```
+    {
+    "name": "react-blog-backend",
+    "version": "1.0.0",
+    "description": "A Koa and GraphQL backend for React blog",
+    "main": "app.js",
+    "scripts": {
+        "test": "test"
+    },
+    "author": "Benson Tuan",
+    "license": "ISC"
+    }
+  ```
+  - run by `node app` in command line
+
+- 安裝套件 `npm i -S [dependency...1] [...2] [...3] `
+  - apollo-server-koa
+  - graphql-tools
+  - koa
+  - moment
+
+- In app.js 
+  - Set Apollo Server
+    - Import resolvers & typeDefs
+  - Set Koa Server
+  - Set Koa as Apollo Server's MiddleWare
+
+## GraphSQL
+- type, schema, and resolver
+
+## MySQL
+- 3rd normal form (3NF):
+  - 確保在一個 table 內，除了 primiry key 的其他鍵值都是彼此獨立無關
+  - should never have a many-to-many relationship
+  - If having one-to-one relationship, consider merging those 2 table into 1 table.
+- Lucidchart website: to draw entity relationship diagram (ERD) and know cardinality
+- Composite Key: 例如一個文章有很多個 Likes，但一人只能貢獻一個。 <br/>
+  所以這個 table 內的 post_id, author_id 組成一個 Composite 
+
+
+a reference table :
+a table where you have one record from one table and reference to another, and it links them together, so that you can join on that table where those 2 IDs exist

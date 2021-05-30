@@ -31,13 +31,11 @@ const mergeStyles = function (posts, config) {
     posts.forEach((post, index) => {
         post.style = config[index] // if config have that index ...
         post.author = 'Benson Tuan'
-        post.description = "經過幾許途程，所以那邊的街市，怕大家都記不起了，一勺冰水，也是不容易，愈著急愈覺得金錢的寶貴，以為是他的同伴跟在後頭，刀鎗是生活上必需的器具，昨晚曾賜過觀覽，現在想沒得再一個，非意識地復閉上了眼皮；一瞬之後，），對著它有這麼大的感情？還不賴，還不賴，"
+        post.description = "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. "
     })
 }
 
 const recentPost = [...trending, ...featured, ...featured]
-console.log("const recentPost = [...trending, ...featured, ...featured]")
-console.log(recentPost)
 
 mergeStyles(trending, trendingConfig)
 mergeStyles(featured, featuredConfig)
