@@ -3,6 +3,7 @@
 # dependencies
 .vscode
 /graphql/node_modules
+/graphql/.env
 /node_modules
 /.pnp
 .pnp.js

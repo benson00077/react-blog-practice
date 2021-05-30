@@ -1,4 +1,4 @@
-# My react blog practice note (Front-end)
+# [Front-end] Practice note
 
 ## TBD: Table of Contetns
 to download MarkDown All in One in VSCode
@@ -6,13 +6,14 @@ to download MarkDown All in One in VSCode
 ## TBD: File tree
 to download awesome extension in VSCode
 
-## Dependency used
-`eco-system`: react-router-dom <br/>
-`SASS`: node-sass, sass-loader <br/>
-`UI`: antd & ionicons <br/> 
-`Date`: moment. `moment().format('MMMM DD, YYYY')` to generate posts date <br/>
-`Posts obj literals`: defined in mocks direcotry (pretend back-end logic datas) <br/>
-- How does these SCSS & UI tools inplemented in `index.js` ? 
+## Init: 
+- Dependencies
+  - `eco-system`: react-router-dom
+  - `SASS`: node-sass, sass-loader
+  - `UI`: antd & ionicons
+  - `Date`: moment. `moment().format('MMMM DD, YYYY')` to generate posts date
+  - `Posts obj literals`: defined in mocks direcotry (pretend back-end logic datas)
+- [TBD] How does these SCSS & UI tools inplemented in `index.js` ? 
   不太確定為何最後會跑到 HTML header 區塊內，然後都變成 style 標籤？
   ```JSX
     import './assets/SCSS/base.scss'
@@ -31,7 +32,7 @@ to download awesome extension in VSCode
 
 
 ## BUILDING: Navigation bar w/ RWD
-### 動態管理 URL 
+### [skills] 動態管理 URL
 - 目的：避免 hardcode 每個分頁的 `<Route>` component. To render any dynamic page without having to maintain nav links component, 
 - 方法：利用 `match obj` defined in react-router-dom
   - [To learn match obj by official doc](https://reactrouter.com/web/api)
@@ -76,7 +77,7 @@ to download awesome extension in VSCode
     export default PageRenderer
 
     ```
-### 引用外部檔案 -- Import vs. Require
+### [skills] 引用外部檔案 -- Import vs. Require
 - 比較
   | 方法 | 引用or加載 | difference
   | ------ | ------ | ------ |
@@ -95,8 +96,8 @@ Home
 └───MasonryPost (eg. for specific css inline style)
 ```
 
-### CSS Grid merge specifig config ── merge with posts obj literal thus manipulate one's css out of many
-- Where: in home.js
+### [skills] CSS Grid merge specifig config
+- Where: in home.js (Home page)
 - Purpose: 
   - seperation of concerns (`SOC`) 
   - dynamic let one grid out of many have different grid-area style(by Inline style).
@@ -150,7 +151,7 @@ Home
     - `How`: Useing `window.innerWidth` to access the window's visual viewport & Useing `ternary conditional operator` to filter the inline style. 
     - `TBD`: One downside is UI won't change smoothly according to manul draging to change window's visual viewport, only when refresh the page would fix the UI problem. 
 
-### TroubleShooting: Background img not loaded
+### [TroubleShooting] Background img not loaded
 - 問題出在 `require(url)` vs `require(url).default` （後者才載出來）
 - But WHY ??
   ```JSX
@@ -166,12 +167,12 @@ Home
 
 ## BUILDING: Pagination & Hooks
 
-### Pagination 翻頁機能 [TBD]
+### [skills] Pagination 翻頁機能 [TBD]
 - home.js 內的 post-grid.js
 - [TBD] 控制一頁顯示幾個 Posts：使用 useMemo + useState → BUT why not useEffect or useCallback ?
 - 翻頁後自動拉動捲軸向上：useEffect
 
-### CSS dealing with backgorund img(variouse size) in grid
+### [skills] CSS dealing with backgorund img(variouse size) in grid
 - 三個重點
   - `<a>` & `<img>` 分別如何 fetch bg-img ?
   - 承上，JSX中如何將其 `url str` (代表檔案路徑的str) 放入 inline style？
@@ -203,7 +204,7 @@ Home
 
 
 
-# My react blog practice note (Front-end)
+# [Back-end] Practice note
 
 ## TBD: Table of Contetns
 to download MarkDown All in One in VSCode
@@ -211,9 +212,9 @@ to download MarkDown All in One in VSCode
 ## TBD: File tree
 to download awesome extension in VSCode
 
-## Init
-- 初始化 `npm init` <br/>
-  - `scripts:test` for example, let you type `npm run test` in Unix Command to run your script.
+## Init Server
+- 初始化 `npm init` in new created file named graphql<br/>
+  - `scripts:test` in package.json, let you type `npm run test` in Unix Command to run your script.
   ```
     {
     "name": "react-blog-backend",
@@ -229,30 +230,204 @@ to download awesome extension in VSCode
   ```
   - run by `node app` in command line
 
-- 安裝套件 `npm i -S [dependency...1] [...2] [...3] `
+- Dependencies: setting by `npm i -S [dependency...1] [...2] [...3] `
   - apollo-server-koa
   - graphql-tools
   - koa
   - moment
 
-- In app.js 
+- In app.js → BUT what's under the hood ?
   - Set Apollo Server
     - Import resolvers & typeDefs
   - Set Koa Server
   - Set Koa as Apollo Server's MiddleWare
+  - Koa server listen to port
 
 ## GraphSQL
 - type, schema, and resolver
 
-## MySQL
-- 3rd normal form (3NF):
-  - 確保在一個 table 內，除了 primiry key 的其他鍵值都是彼此獨立無關
-  - should never have a many-to-many relationship
-  - If having one-to-one relationship, consider merging those 2 table into 1 table.
-- Lucidchart website: to draw entity relationship diagram (ERD) and know cardinality
-- Composite Key: 例如一個文章有很多個 Likes，但一人只能貢獻一個。 <br/>
+## SQL db notion
+### [skills] Data modeling - design the db
+- Draw entity relationship diagram (ERD) to know cardinality
+  - Database Cardinality: 
+    - Definition: [See here](https://orangematter.solarwinds.com/2020/01/05/what-is-cardinality-in-a-database/)
+    - Tools: [Lucidchart](https://www.lucidchart.com/pages/) to draw ERD
+  - 3rd normal form (3NF):
+    - 確保在一個 table 內，除了 primiry key 的其他鍵值都是彼此獨立無關
+    - should never have a many-to-many relationship (between 2 tables
+    - Instead, using a `reference table` instead, which links those 2 table together.
+    - If having one-to-one relationship, consider merging those 2 table into 1.
+  - Composite Key: 例如一個文章有很多個 Likes，但一人只能貢獻一個。 <br/>
   所以這個 table 內的 post_id, author_id 組成一個 Composite 
 
+## MySQL
+### Init for MySQL
+- `brew install mysql`
+- CLI: `mysql.server start`
+- [troubleshoting]: 
+  - brew auto-updated when installing, node was as well updated. BUT node-sass not yet suport it.
+  - Install nvm to manage node version.
 
-a reference table :
-a table where you have one record from one table and reference to another, and it links them together, so that you can join on that table where those 2 IDs exist
+### Init for connection
+- Dependencies: setting by `npm i -S [dependency...1] [...2] [...3] `
+  - `mysql2`: db connector
+  - `knex`: JavaScript MySQl query builder
+  - `dotenv`: 
+- Create file `.env`
+  - Commented out by `.gitignore`
+  - Allows us to have a separate .env file in every enviroment. After deploying would have dirrerent sql db, user, password...
+  - `.env` for local test
+  ```
+    MYSQL_HOST=127.0.0.1
+    MYSQL_USER=root
+    MYSQL_PASS=
+    MYSQL_DB=react_blog
+  ```
+
+### Build connection
+- how ? 
+
+
+## Node version management
+    brew install mysql casing brew auto-update and node auto-update, which might throw erre of not suportinig for latest node version.
+### nvm install by MacOS homebrew ❌
+    結論：請按照官網去下載，nvm 不支援 homebrew，會引來很多麻煩⋯⋯以下記錄錯誤過程
+- `brew install nvm`
+- `brew info nvm` see the "caveats" section, like following
+  ```
+    You should create NVM's working directory if it doesn't exist:
+
+    mkdir ~/.nvm
+
+    Add the following to ~/.zshrc or your desired shell
+    configuration file:
+
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+    [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+    You can set $NVM_DIR to any location, but leaving it unchanged from
+    /usr/local/opt/nvm will destroy any nvm-installed Node installations
+    upon upgrade/reinstall.
+  ```
+- `mkdir ~/.nvm`. At root dir `ls` don't show the file, but `ls -a` or `ls -al` does shows.
+- `~/.zshrc` but terminal says `zsh: permission denied` 
+  - zsh is the shell I'm using, some use bash
+  - .zshrc is the configuration file itself, would run whenever start zsh
+- `cat ~/.zshrc` to read it
+  - there are some conda init stuff, seems that I'm using zsh cause conda setting it for me
+- (op1) `vim ~/.zshrc` to edit it
+  - To edit, press `i` button
+  - To save the changes,  `esc +: qw`
+- (op2) `nano ~/.zshrc` to edit it
+  - `Ctrl+o` to save
+  - `Ctrl+x` to exit 
+  - caveats 所說的 `NVM_DIR="$HOME/.nvm"` 改成 `Users/benson/.nvm` 跟改成 `~/.nvm` 但都沒用！Shell 內還是不知道 nvm 是誰
+- `source ~/.zshrc` or reset the terminal before run the nvm
+  - `source` command can be used to load any functions file into the current shell script or a command prompt.
+  - `sourced shell function ` vs `executable binary` [參考文章](https://medium.com/@toumasaya/node-js-環境設定-for-mac-a2628836feaf)
+    - 無法使用 `which nvm` 來檢查，因為 nvm 是一個 sourced shell function
+    - 最好還是按照官網去下載，nvm 不支援 homebrew，所以才那麼多麻煩⋯⋯
+- 不安全的目錄：重新開啟或是 source 檔案後都會出現
+  ```
+  zsh compinit: insecure directories, run compaudit for list.
+  Ignore insecure directories and continue [y] or abort compinit [n]? 
+  ```
+### 重新整理、安裝 npm, nvm, node
+    目標架構：不透過 brew，安裝 nvm，之下安裝 npm，之下安裝 node
+#### 解除安裝前面 brew 安裝失敗的東西
+  ```
+  brew uninstall nvm
+  sudo rm -rf ~/.nvm
+  sudo rm -rf ~/.npm
+  vi /usr/個人電腦用戶名/.bash_profile
+  ```
+  - `-rf`: combination of 2 commands: `-r` (recursive removal), `-f` (force)
+  - `~/.npm` is a cache that npm uses to avoid re-downloading the same package multiple times. 
+    - `npm cache clean` to cleanup
+  - (bash_profile 類似於前述我用的 zshrc，刪掉前述新增的config)
+#### 解除安裝前面 node 
+  - `brew uninstall node`
+#### nvm install by cURL ⭕️ 
+  - by cURL command: `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash`
+  - 按照[nvm的git官網](https://github.com/nvm-sh/nvm)的除錯建議，新增設定到`~/.zshrc`之後`. ~/.zshrc`就可以了（等同`source ~/.zshrc`）
+#### nvm command 
+  - `nvm ls` 列出 Local 所有的 Node.js 版本
+  - `nvm ls-remote` 列出 Remote 所有的 Node.js 版本
+  - `nvm install [version]` version = number
+  - `nvm install stable` 安裝目前的穩定版(但是不是官網推薦版本⋯⋯是最新)
+  - `nvm alias default [version]` 指令以後預設啟用的 Node.js 版本
+  - `nvm use [version]` 使用該版本，但不更改預設啟用的版本
+
+### 記錄前後差異
+  - `which node`
+    - before: /usr/local/bin
+    - after: /Users/benson/.nvm/versions/node/v14.17.0/bin/node
+  - `which npm`
+    - before: /usr/local/bin
+    - after: /Users/benson/.nvm/versions/node/v14.17.0/bin/npm
+  - `npm list -g` 全域安裝的套件
+    - before
+      ```
+      (base) benson@BensondeMacBook-Pro .npm % `npm list -g`
+      /usr/local/lib
+      ├── create-react-app@4.0.3
+      ├── npm@7.13.0
+      └── sass@1.32.8
+      ```
+    - after 
+      ```
+      一大堆東西⋯⋯why?
+      ```
+  - `npm list` 當前目錄下安裝的套件，以此專案目錄為例
+    - before
+    ```
+    (base) benson@BensondeMacBook-Pro blog-react % `npm ls`
+    blog-react@0.1.0 /Users/benson/Documents/workrepo/blog-react
+    ├── @quasar/extras@1.10.2
+    ├── @testing-library/jest-dom@5.11.10
+    ├── @testing-library/react@11.2.6
+    ├── @testing-library/user-event@12.8.3
+    ├── antd@4.15.0
+    ├── moment@2.29.1
+    ├── node-sass@5.0.0
+    ├── react-dom@17.0.2
+    ├── react-router-dom@5.2.0
+    ├── react-scripts@4.0.3
+    ├── react@17.0.2
+    ├── sass-loader@10.1.1
+    └── web-vitals@1.1.1
+    ```
+    - after 噴一堆錯.....
+    ``` 
+    npm WARN , but package-lock.json was generated for lockfileVersion@2. I'll try to do my best with it!
+    ```
+
+
+    
+
+
+
+(base) benson@BensondeMacBook-Pro .npm % `npm list -g`
+/usr/local/lib
+├── create-react-app@4.0.3
+├── npm@7.13.0
+└── sass@1.32.8
+
+
+如果沒有 -g 就是查看當前目錄
+(base) benson@BensondeMacBook-Pro blog-react % `npm ls`
+blog-react@0.1.0 /Users/benson/Documents/workrepo/blog-react
+├── @quasar/extras@1.10.2
+├── @testing-library/jest-dom@5.11.10
+├── @testing-library/react@11.2.6
+├── @testing-library/user-event@12.8.3
+├── antd@4.15.0
+├── moment@2.29.1
+├── node-sass@5.0.0
+├── react-dom@17.0.2
+├── react-router-dom@5.2.0
+├── react-scripts@4.0.3
+├── react@17.0.2
+├── sass-loader@10.1.1
+└── web-vitals@1.1.1
