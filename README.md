@@ -33,7 +33,7 @@ to download awesome extension in VSCode
 
 ## BUILDING: Navigation bar w/ RWD
 ### [skills] 動態管理 URL
-- 目的：避免 hardcode 每個分頁的 `<Route>` component. To render any dynamic page without having to maintain nav links component, 
+-g 目的：避免 hardcode 每個分頁的 `<Route>` component. To render any dynamic page without having to maintain nav links component, 
 - 方法：利用 `match obj` defined in react-router-dom
   - [To learn match obj by official doc](https://reactrouter.com/web/api)
   - [To learn match obj by other's note](https://ithelp.ithome.com.tw/articles/10204451)
@@ -228,13 +228,14 @@ to download awesome extension in VSCode
     "license": "ISC"
     }
   ```
-  - run by `node app` in command line
+  - run by `node app` in command line, with GraphQL plaground, a chrome extension
 
 - Dependencies: setting by `npm i -S [dependency...1] [...2] [...3] `
   - apollo-server-koa
   - graphql-tools
   - koa
   - moment
+  - bluebird: handle promises in different way
 
 - In app.js → BUT what's under the hood ?
   - Set Apollo Server
@@ -243,22 +244,22 @@ to download awesome extension in VSCode
   - Set Koa as Apollo Server's MiddleWare
   - Koa server listen to port
 
-## GraphSQL
+## [TBD] GraphSQL
 - type, schema, and resolver
 
 ## SQL db notion
-### [skills] Data modeling - design the db
+### [skills] Data modeling
 - Draw entity relationship diagram (ERD) to know cardinality
   - Database Cardinality: 
     - Definition: [See here](https://orangematter.solarwinds.com/2020/01/05/what-is-cardinality-in-a-database/)
     - Tools: [Lucidchart](https://www.lucidchart.com/pages/) to draw ERD
   - 3rd normal form (3NF):
     - 確保在一個 table 內，除了 primiry key 的其他鍵值都是彼此獨立無關
-    - should never have a many-to-many relationship (between 2 tables
+    - should never have a many-to-many relationship (between 2 tables)
     - Instead, using a `reference table` instead, which links those 2 table together.
     - If having one-to-one relationship, consider merging those 2 table into 1.
   - Composite Key: 例如一個文章有很多個 Likes，但一人只能貢獻一個。 <br/>
-  所以這個 table 內的 post_id, author_id 組成一個 Composite 
+  所以這個 table 內的 post_id, author_id 組成一個 Composite key
 
 ## MySQL
 ### Init for MySQL
@@ -266,26 +267,87 @@ to download awesome extension in VSCode
 - CLI: `mysql.server start`
 - [troubleshoting]: 
   - brew auto-updated when installing, node was as well updated. BUT node-sass not yet suport it.
-  - Install nvm to manage node version.
+  - Install nvm to manage node version, instead of homebrew.
 
 ### Init for connection
 - Dependencies: setting by `npm i -S [dependency...1] [...2] [...3] `
   - `mysql2`: db connector
-  - `knex`: JavaScript MySQl query builder
-  - `dotenv`: 
+  - `knex`: A sql query builder
+  - `dotenv`: Access file `.env`
 - Create file `.env`
-  - Commented out by `.gitignore`
-  - Allows us to have a separate .env file in every enviroment. After deploying would have dirrerent sql db, user, password...
-  - `.env` for local test
+  - Commented out by `.gitignore`: 檔案內會放環境變數，常存放敏感資料如帳密
+  - Allows us to have a separate .env file in every enviroment. After deploying would have different sql db, user, password...
+  - `.env` for local test setting as below
   ```
     MYSQL_HOST=127.0.0.1
     MYSQL_USER=root
     MYSQL_PASS=
     MYSQL_DB=react_blog
   ```
+  - 根據[官方文件](https://www.npmjs.com/package/dotenv)，config() 會在執行的目錄下讀取 .env 檔，並註冊到 process.env
+  ```Javascript
+  let result = require('dotenv').config()
 
-### Build connection 2 MySQL
+  if (result.error) {
+      throw result.error
+  }
+  console.log(result.parsed)
+  ```
+### Run Mysql (global call)
+  | 指令 | 說明 |
+  | ------ | ------ |
+  | `mysql.server start` | 
+  | `mysql.server stop` |
+  | `mysql -u root -p` | 密碼連線，root可改成使用者名稱 
+  | `show databases`  | 
+  | `use [database]` | To access a specific database
+  | `show tables` | 
+
+### [TBD] Build connection to MySQL
 - how ? 
+
+### [TBD] Create and run db migration
+
+
+#### [Skills] Error Control: Sync & Async & Promise-based
+1. `Async` Function: inner `Throw err`in cb
+```JavaScript
+// run-migration.js
+const path = require('path')
+const fs = require('fs')
+
+fs.readdir(path.resolve(__dirname, './database/migration'), (err, files)=> {
+    if (err) throw new Error(err)  // or throw err
+    return console.log(files);
+})
+```
+- [TBD] 這些定義 cb 為參數傳入的函數，怎麼調用到那些 “傳遞給 cb 的參數"？例如上例中的 (err, files) ? 
+2. `Sync` Function: outer `Try & Catch` 
+  ```JavaScript
+  const fs = require('fs')
+    
+  try {
+    const file = fs.readFileSync('./README.md')
+    console.log(file)
+  } catch(err) {
+    console.log('讀檔失敗')
+  }
+  ```
+3. `Promise` based: `.then().catch()`
+- [TBD] 題目：例如使用 `fs.readdir`拿到每個檔案名的陣列後，要再用`fs.readfile()`讀取每個檔案，直覺上你的寫法？現在較好的寫法為？
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -317,7 +379,7 @@ brew install mysql lead to brew auto-update and node auto-update, anthus node-sa
   - zsh is the shell I'm using, some use bash
   - .zshrc is the configuration file itself, would run whenever start zsh
 - `cat ~/.zshrc` to read it
-  - there are some conda init stuff, seems that I'm using zsh cause conda setting it for me
+  - there are some conda init stuff
 - (op1) `vim ~/.zshrc` to edit it
   - To edit, press `i` button
   - To save the changes,  `esc +: qw`
@@ -351,11 +413,11 @@ brew install mysql lead to brew auto-update and node auto-update, anthus node-sa
 #### 解除安裝前面 node
   - `brew uninstall node`
 #### nvm install by cURL
-  - by cURL command: 
+  - 以下指令會把 nvm repository 複製到 `~/.nvm`:
     ```
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
     ```
-  - 按照[nvm的git官網](https://github.com/nvm-sh/nvm)的除錯建議，新增設定到`~/.zshrc`之後`. ~/.zshrc`就可以了（等同`source ~/.zshrc`）
+  - 按照[nvm的git官網](https://github.com/nvm-sh/nvm)的除錯建議，新增設定到`~/.zshrc`之後再輸入`. ~/.zshrc`就可以了（等同`source ~/.zshrc`）
 #### nvm command 
   | 指令 | 說明 |
   | ------ | ------ |
@@ -367,10 +429,11 @@ brew install mysql lead to brew auto-update and node auto-update, anthus node-sa
   |`nvm use [version]` | 使用該版本，但不更改預設啟用的版本 |
 
 #### npm, node installed by nvm
-  - 按照上面指令下載 LTS node 版本
+  - 按照上面指令下載 node LTS 版本
   - Node would include npm
 
 ### 🔺 記錄前後差異
+#### 檢查 node, npm
   - `which node`
     - before: /usr/local/bin
     - after: /Users/benson/.nvm/versions/node/v14.17.0/bin/node
@@ -386,9 +449,10 @@ brew install mysql lead to brew auto-update and node auto-update, anthus node-sa
       ├── npm@7.13.0
       └── sass@1.32.8
       ```
-    - after 
+    - after 卻跑出一大串東西，改成改成輸入 `npm list -g --depth=0` 後乾淨許多
       ```
-      一大堆東西⋯⋯why?
+      /Users/benson/.nvm/versions/node/v14.17.0/lib
+      └── npm@6.14.13
       ```
   - `npm list` 當前目錄下安裝的套件，以此專案目錄為例
     - before
@@ -411,6 +475,8 @@ brew install mysql lead to brew auto-update and node auto-update, anthus node-sa
     ```
     - after 噴一堆錯.....
     ``` 
-    npm WARN , but package-lock.json was generated for lockfileVersion@2. I'll try to do my best with it!
+    npm WARN read-shrinkwrap This version of npm is compatible with lockfileVersion@1, but package-lock.json was generated for lockfileVersion@2. I'll try to do my best with it!
     ```
+#### 檢查 react-blog 專案
+貌似是我前面刪掉了 npm cache，`npm start`嘗試啟動react專案後，node-sass噴錯要我執行 `npm rebuild node-sass`，之後就成功開啟了。
 
